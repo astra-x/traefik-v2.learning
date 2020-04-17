@@ -1,0 +1,51 @@
+version: "3.3"
+
+services:
+  ##################################
+  ####        Traefik Proxy Setup           #####
+  ###################################
+  traefik:
+    image: traefik:v2.2
+    restart: always
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --api.debug=true
+      - --log.level=DEBUG
+      # DEFINE THE NAMES OF YOUR CERT AND KEY IN HERE
+      # DEFINE THE REDIRECT RULE IN HERE
+      - --providers.providersThrottleDuration=10s
+      - --providers.file.filename=dynamic.yml
+      - --providers.file.watch=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=web
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./certs/:/etc/certs/ ## MOUNT THE DIRECTORY WITH YOUR CERTS AND KEYS IN IT
+      - ./dynamic.yml:/dynamic.yml
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+
+networks:
+  web:
+    external: true
