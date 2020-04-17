@@ -1,0 +1,23 @@
+log:
+  level: "DEBUG"
+
+api:
+  insecure: true
+  dashboard: true
+  debug: true
+
+providers:
+  providersThrottleDuration: 10
+  file:
+    watch: true
+    filename: "dynamic.yml"
+  docker:
+    exposedByDefault: true
+    network: "web"
+
+entryPoints:
+  web:
+    address: ":80"
+
+  websecure:
+    address: ":443"

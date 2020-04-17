@@ -12,24 +12,10 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
-    command:
-      - --api.insecure=true
-      - --api.dashboard=true
-      - --api.debug=true
-      - --log.level=DEBUG
-      # DEFINE THE NAMES OF YOUR CERT AND KEY IN HERE
-      # DEFINE THE REDIRECT RULE IN HERE
-      - --providers.providersThrottleDuration=10s
-      - --providers.file.filename=dynamic.yml
-      - --providers.file.watch=true
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --providers.docker.network=web
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./certs/:/etc/certs/ ## MOUNT THE DIRECTORY WITH YOUR CERTS AND KEYS IN IT
+      - ./traefik.yml:/etc/traefik/traefik.yml
       - ./dynamic.yml:/dynamic.yml
     networks:
       - web
