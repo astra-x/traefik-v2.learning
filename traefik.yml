@@ -1,5 +1,5 @@
 log:
-  level: "DEBUG"
+  level: DEBUG
 
 api:
   insecure: true
@@ -10,14 +10,21 @@ providers:
   providersThrottleDuration: 10
   file:
     watch: true
-    filename: "dynamic.yml"
+    filename: dynamic.yml
   docker:
     exposedByDefault: true
-    network: "web"
+    network: web
 
 entryPoints:
   web:
-    address: ":80"
-
+    address: :80
   websecure:
-    address: ":443"
+    address: :443
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: youtao.xing@icloud.com
+      storage: acme.json
+      httpChallenge:
+        entryPoint: web

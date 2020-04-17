@@ -9,19 +9,20 @@ services:
     restart: always
     container_name: traefik
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
+      - 80:80
+      - 443:443
+      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./certs/:/etc/certs/ ## MOUNT THE DIRECTORY WITH YOUR CERTS AND KEYS IN IT
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./dynamic.yml:/dynamic.yml
+      - ./acme.json:/acme.json
     networks:
       - web
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - traefik.enable=true
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
 
   nginx:
     image: nginx
@@ -29,8 +30,8 @@ services:
     networks:
       - web
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+      - traefik.enable=true
+      - traefik.http.services.nginx.loadbalancer.server.port=80
 
 networks:
   web:

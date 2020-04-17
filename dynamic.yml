@@ -11,12 +11,13 @@ http:
   routers:
     nginx-web:
       entryPoints:
-        - "web"
-      rule: "Host(`nginx-web.com`)"
-      service: "nginx@docker"
+        - web
+      rule: Host(`nginx-web.com`)
+      service: nginx@docker
     nginx-secured:
       entryPoints:
-        - "websecure"
-      rule: "Host(`nginx-secured.com`)"
-      service: "nginx@docker"
-      tls: {}
+        - websecure
+      rule: Host(`nginx-secured.com`)
+      service: nginx@docker
+      tls:
+        certResolver: letsencrypt
